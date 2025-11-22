@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{hyperref}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
@@ -37,7 +38,7 @@ Vadodara, India \\
 \maketitle
 
 \begin{abstract}
-This report details the implementation and analysis of three fundamental Reinforcement Learning (RL) problems: the Matchbox Educable Naughts and Crosses Engine (MENACE) for Tic-Tac-Toe, the Binary Bandit problem, and the 10-Armed Non-Stationary Bandit problem. We explore the effectiveness of the Epsilon-Greedy algorithm and its modified version for non-stationary environments. Our results demonstrate the learning capability of MENACE and the superior adaptability of constant step-size updates in changing environments.
+This report details the implementation and analysis of three fundamental Reinforcement Learning (RL) problems: the Matchbox Educable Naughts and Crosses Engine (MENACE) for Tic-Tac-Toe, the Binary Bandit problem, and the 10-Armed Non-Stationary Bandit problem. We explore the effectiveness of the Epsilon-Greedy algorithm and its modified version for non-stationary environments. Our results demonstrate the learning capability of MENACE and the superior adaptability of constant step-size updates in changing environments. All code and visualizations are available at: \texttt{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -68,7 +69,7 @@ The Matchbox Educable Naughts and Crosses Engine (MENACE), introduced by Donald 
         \item \textbf{Loss}: Remove 1 bead.
     \end{itemize}
 \end{itemize}
-We implemented this logic in Python, training against a Random Agent.
+We implemented this logic in Python, training against a Random Agent. Source code: \texttt{ex7\_1.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_1.py}}
 
 \subsection{Binary Bandit}
 We consider a 2-armed bandit where each arm returns a reward of 1 (success) or 0 (failure) with fixed probabilities $p_A$ and $p_B$. We use the \textbf{Epsilon-Greedy} algorithm:
@@ -78,14 +79,14 @@ A_t = \begin{cases}
 \arg\max_a Q_t(a) & \text{with prob. } 1 - \epsilon 
 \end{cases}
 \end{equation}
-The value estimates $Q_t(a)$ are updated using the sample average method.
+The value estimates $Q_t(a)$ are updated using the sample average method. Source code: \texttt{ex7\_2.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_2.py}}
 
 \subsection{Non-Stationary 10-Armed Bandit}
 In this task, we have 10 arms. The mean reward of each arm follows a random walk:
 \begin{equation}
 \mu_t(a) = \mu_{t-1}(a) + \eta, \quad \eta \sim \mathcal{N}(0, 0.01)
 \end{equation}
-This non-stationarity makes sample averages ineffective as they weigh old rewards equally to new ones. We compare two agents:
+This non-stationarity makes sample averages ineffective as they weigh old rewards equally to new ones. The bandit environment is implemented in \texttt{ex7\_3.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_3.py}}. We compare two agents:
 \begin{enumerate}
     \item \textbf{Standard Agent}: Uses sample averages.
     \item \textbf{Modified Agent}: Uses a constant step-size parameter $\alpha \in (0, 1]$:
@@ -94,6 +95,7 @@ This non-stationarity makes sample averages ineffective as they weigh old reward
     \end{equation}
     This gives more weight to recent rewards, allowing the agent to track changes.
 \end{enumerate}
+The comparison implementation is in \texttt{ex7\_4.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_4.py}}.
 
 \section{Results}
 

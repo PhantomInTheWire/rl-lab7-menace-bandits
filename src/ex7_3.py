@@ -4,11 +4,10 @@ import matplotlib.pyplot as plt
 class NonStationaryBandit:
     def __init__(self, k=10):
         self.k = k
-        self.means = np.zeros(k) # All start at 0
+        self.means = np.zeros(k)
         self.time_step = 0
 
     def step(self):
-        # Random walk: add N(0, 0.01) to all means
         self.means += np.random.normal(0, 0.01, self.k)
         self.time_step += 1
 
@@ -32,8 +31,8 @@ def visualize_random_walk(steps=1000):
     plt.ylabel('Mean Reward')
     plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1))
     plt.tight_layout()
-    plt.savefig('bandit_means.png')
-    print("Plot saved to bandit_means.png")
+    plt.savefig('../results/bandit_means.png')
+    print("Plot saved to ../results/bandit_means.png")
 
 if __name__ == "__main__":
     visualize_random_walk(steps=2000)

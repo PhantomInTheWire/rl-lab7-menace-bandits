@@ -69,7 +69,7 @@ The Matchbox Educable Naughts and Crosses Engine (MENACE), introduced by Donald 
         \item \textbf{Loss}: Remove 1 bead.
     \end{itemize}
 \end{itemize}
-We implemented this logic in Python, training against a Random Agent. Source code: \texttt{ex7\_1.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_1.py}}
+We implemented this logic in Python, training against a Random Agent. Source code: \texttt{src/ex7\_1.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/src/ex7_1.py}}
 
 \subsection{Binary Bandit}
 We consider a 2-armed bandit where each arm returns a reward of 1 (success) or 0 (failure) with fixed probabilities $p_A$ and $p_B$. We use the \textbf{Epsilon-Greedy} algorithm:
@@ -79,14 +79,14 @@ A_t = \begin{cases}
 \arg\max_a Q_t(a) & \text{with prob. } 1 - \epsilon 
 \end{cases}
 \end{equation}
-The value estimates $Q_t(a)$ are updated using the sample average method. Source code: \texttt{ex7\_2.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_2.py}}
+The value estimates $Q_t(a)$ are updated using the sample average method. Source code: \texttt{src/ex7\_2.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/src/ex7_2.py}}
 
 \subsection{Non-Stationary 10-Armed Bandit}
 In this task, we have 10 arms. The mean reward of each arm follows a random walk:
 \begin{equation}
 \mu_t(a) = \mu_{t-1}(a) + \eta, \quad \eta \sim \mathcal{N}(0, 0.01)
 \end{equation}
-This non-stationarity makes sample averages ineffective as they weigh old rewards equally to new ones. The bandit environment is implemented in \texttt{ex7\_3.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_3.py}}. We compare two agents:
+This non-stationarity makes sample averages ineffective as they weigh old rewards equally to new ones. The bandit environment is implemented in \texttt{src/ex7\_3.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/src/ex7_3.py}}. We compare two agents:
 \begin{enumerate}
     \item \textbf{Standard Agent}: Uses sample averages.
     \item \textbf{Modified Agent}: Uses a constant step-size parameter $\alpha \in (0, 1]$:
@@ -95,7 +95,7 @@ This non-stationarity makes sample averages ineffective as they weigh old reward
     \end{equation}
     This gives more weight to recent rewards, allowing the agent to track changes.
 \end{enumerate}
-The comparison implementation is in \texttt{ex7\_4.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/ex7_4.py}}.
+The comparison implementation is in \texttt{src/ex7\_4.py}\footnote{\url{https://github.com/PhantomInTheWire/rl-lab7-menace-bandits/blob/master/src/ex7_4.py}}.
 
 \section{Results}
 
@@ -103,7 +103,7 @@ The comparison implementation is in \texttt{ex7\_4.py}\footnote{\url{https://git
 The MENACE agent was trained for 2000 episodes against a random opponent. Fig.~\ref{fig:menace} shows the win rate (averaged over 100-episode blocks). The agent successfully learns to avoid losses and capitalize on the opponent's mistakes, increasing its win rate significantly from the initial random baseline.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{menace_results.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{../results/menace_results.png}}
 \caption{Win Rate of MENACE Agent vs. Random Agent over 2000 episodes.}
 \label{fig:menace}
 \end{figure}
@@ -112,7 +112,7 @@ The MENACE agent was trained for 2000 episodes against a random opponent. Fig.~\
 For the Binary Bandit with $p_A=0.7$ and $p_B=0.3$, the Epsilon-Greedy agent ($\epsilon=0.1$) quickly converged to the optimal action. Fig.~\ref{fig:binary} shows the average reward approaching 0.7 and the percentage of optimal actions approaching 90\% (limited by $\epsilon$).
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{binary_bandit_results.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{../results/binary_bandit_results.png}}
 \caption{Average Reward and \% Optimal Action for Binary Bandit.}
 \label{fig:binary}
 \end{figure}
@@ -121,7 +121,7 @@ For the Binary Bandit with $p_A=0.7$ and $p_B=0.3$, the Epsilon-Greedy agent ($\
 We ran the 10-armed non-stationary bandit experiment for 10,000 steps, averaged over 20 runs. Fig.~\ref{fig:means} illustrates the random walk of the true means.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{bandit_means.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{../results/bandit_means.png}}
 \caption{Random Walk of Mean Rewards for 10 Arms.}
 \label{fig:means}
 \end{figure}
@@ -129,7 +129,7 @@ We ran the 10-armed non-stationary bandit experiment for 10,000 steps, averaged 
 Fig.~\ref{fig:comparison} compares the Standard and Modified agents. The Modified Agent ($\alpha=0.1$) consistently achieves higher rewards and selects the optimal action more frequently than the Standard Agent. The Standard Agent fails to adapt quickly to the changing means because its effective step size $1/n$ decreases over time, making it insensitive to recent changes.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{non_stationary_comparison.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{../results/non_stationary_comparison.png}}
 \caption{Comparison of Standard (Sample Avg) vs. Modified (Constant Step-size) Agents.}
 \label{fig:comparison}
 \end{figure}

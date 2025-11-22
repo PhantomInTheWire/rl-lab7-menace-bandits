@@ -17,7 +17,6 @@ class StandardAgent:
 
     def update(self, action, reward):
         self.action_counts[action] += 1
-        # Sample average: Q_n+1 = Q_n + 1/n * (R - Q_n)
         self.q_values[action] += (1.0 / self.action_counts[action]) * (reward - self.q_values[action])
 
 class ModifiedAgent:
@@ -34,11 +33,9 @@ class ModifiedAgent:
             return np.argmax(self.q_values)
 
     def update(self, action, reward):
-        # Constant step-size: Q_n+1 = Q_n + alpha * (R - Q_n)
         self.q_values[action] += self.alpha * (reward - self.q_values[action])
 
 def run_comparison(steps=10000, runs=10):
-    # Average over multiple runs for smoother plots
     avg_rewards_std = np.zeros(steps)
     avg_rewards_mod = np.zeros(steps)
     optimal_action_std = np.zeros(steps)
@@ -52,20 +49,16 @@ def run_comparison(steps=10000, runs=10):
         mod_agent = ModifiedAgent(k=10, epsilon=0.1, alpha=0.1)
         
         for i in range(steps):
-            # Optimal action for this step
             optimal_act = np.argmax(bandit.means)
             
-            # Standard Agent
             act_std = std_agent.get_action()
             rew_std = bandit.pull(act_std)
             std_agent.update(act_std, rew_std)
             
-            # Modified Agent
             act_mod = mod_agent.get_action()
             rew_mod = bandit.pull(act_mod)
             mod_agent.update(act_mod, rew_mod)
             
-            # Record
             avg_rewards_std[i] += rew_std
             avg_rewards_mod[i] += rew_mod
             if act_std == optimal_act:
@@ -73,7 +66,6 @@ def run_comparison(steps=10000, runs=10):
             if act_mod == optimal_act:
                 optimal_action_mod[i] += 1
             
-            # Step bandit
             bandit.step()
             
     avg_rewards_std /= runs
@@ -103,8 +95,8 @@ def plot_comparison(r_std, r_mod, o_std, o_mod):
     plt.legend()
     
     plt.tight_layout()
-    plt.savefig('non_stationary_comparison.png')
-    print("Plot saved to non_stationary_comparison.png")
+    plt.savefig('../results/non_stationary_comparison.png')
+    print("Plot saved to ../results/non_stationary_comparison.png")
 
 if __name__ == "__main__":
     r_std, r_mod, o_std, o_mod = run_comparison(steps=10000, runs=20)

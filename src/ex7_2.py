@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class BinaryBandit:
     def __init__(self, p):
-        self.p = p # Probability of success (reward=1)
+        self.p = p
 
     def pull(self):
         return 1 if np.random.random() < self.p else 0
@@ -19,19 +19,15 @@ class EpsilonGreedyAgent:
         if np.random.random() < self.epsilon:
             return np.random.randint(self.n_actions)
         else:
-            # Break ties randomly
             max_q = np.max(self.q_values)
             actions_with_max_q = [a for a in range(self.n_actions) if self.q_values[a] == max_q]
             return np.random.choice(actions_with_max_q)
 
     def update(self, action, reward):
         self.action_counts[action] += 1
-        # Sample average update: Q(a) <- Q(a) + 1/N(a) * (R - Q(a))
         self.q_values[action] += (1.0 / self.action_counts[action]) * (reward - self.q_values[action])
 
 def run_experiment(steps=2000, epsilon=0.1):
-    # Two bandits: A and B
-    # Let's assume p_A = 0.7, p_B = 0.3 (or similar distinct values)
     bandit_a = BinaryBandit(p=0.7)
     bandit_b = BinaryBandit(p=0.3)
     bandits = [bandit_a, bandit_b]
@@ -41,7 +37,7 @@ def run_experiment(steps=2000, epsilon=0.1):
     rewards = []
     optimal_action_counts = []
     
-    optimal_action = 0 # Since 0.7 > 0.3
+    optimal_action = 0
     
     for i in range(steps):
         action = agent.get_action()
@@ -54,7 +50,6 @@ def run_experiment(steps=2000, epsilon=0.1):
     return rewards, optimal_action_counts
 
 def plot_results(rewards, optimal_action_counts, epsilon):
-    # Moving average for rewards
     window = 50
     avg_rewards = np.convolve(rewards, np.ones(window)/window, mode='valid')
     avg_optimal = np.convolve(optimal_action_counts, np.ones(window)/window, mode='valid')
@@ -76,8 +71,8 @@ def plot_results(rewards, optimal_action_counts, epsilon):
     plt.ylim(0, 1)
     
     plt.tight_layout()
-    plt.savefig('binary_bandit_results.png')
-    print("Plot saved to binary_bandit_results.png")
+    plt.savefig('../results/binary_bandit_results.png')
+    print("Plot saved to ../results/binary_bandit_results.png")
 
 if __name__ == "__main__":
     print("Running Binary Bandit Experiment...")

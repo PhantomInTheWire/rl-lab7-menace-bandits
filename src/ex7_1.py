@@ -4,7 +4,7 @@ import numpy as np
 
 class TicTacToe:
     def __init__(self):
-        self.board = [' ' for _ in range(9)] # 0-8 indices
+        self.board = [' ' for _ in range(9)]
         self.current_winner = None
 
     def available_moves(self):
@@ -25,17 +25,14 @@ class TicTacToe:
         return False
 
     def winner(self, square, letter):
-        # Check row
         row_ind = square // 3
         row = self.board[row_ind*3 : (row_ind+1)*3]
         if all([spot == letter for spot in row]):
             return True
-        # Check column
         col_ind = square % 3
         column = [self.board[col_ind+i*3] for i in range(3)]
         if all([spot == letter for spot in column]):
             return True
-        # Check diagonals
         if square % 2 == 0:
             diagonal1 = [self.board[i] for i in [0, 4, 8]]
             if all([spot == letter for spot in diagonal1]):
@@ -55,30 +52,22 @@ class TicTacToe:
 class MenaceAgent:
     def __init__(self, letter='X', initial_beads=10):
         self.letter = letter
-        self.matchboxes = {} # State -> List of beads (actions)
+        self.matchboxes = {}
         self.initial_beads = initial_beads
-        self.history = [] # List of (state, action) for current game
+        self.history = []
 
     def get_action(self, env):
         state = env.get_state()
         available_moves = env.available_moves()
         
         if state not in self.matchboxes:
-            # Initialize matchbox with beads for available moves
-            # More beads for earlier moves (optional, but standard MENACE used fixed or varying)
-            # Here we just use uniform initial beads for valid moves
             self.matchboxes[state] = []
             for move in available_moves:
                 self.matchboxes[state].extend([move] * self.initial_beads)
         
         beads = self.matchboxes[state]
-        # Filter beads to ensure they are valid moves (in case of weird states, though shouldn't happen if logic is correct)
-        # Actually, if we encounter a new state, we init it. If we revisit, the beads should be valid.
-        # However, if a state is reached via different path, available moves are same.
         
-        if not beads: # Should not happen unless we emptied the box (resigned)
-             # If empty, pick random valid move and re-seed? Or resign?
-             # Standard MENACE: Resign. Here: Random move to keep playing.
+        if not beads:
              return random.choice(available_moves)
 
         action = random.choice(beads)
@@ -86,17 +75,11 @@ class MenaceAgent:
         return action
 
     def update(self, result):
-        # result: 'win', 'loss', 'draw'
-        # MENACE rules:
-        # Win: +3 beads
-        # Draw: +1 bead
-        # Loss: -1 bead (if empty, remove box or handle)
-        
         if result == 'win':
             delta = 3
         elif result == 'draw':
             delta = 1
-        else: # loss
+        else:
             delta = -1
             
         for state, action in self.history:
@@ -104,9 +87,6 @@ class MenaceAgent:
                 if delta > 0:
                     self.matchboxes[state].extend([action] * delta)
                 elif delta < 0:
-                    # Remove beads
-                    # Try to remove 'delta' amount of 'action' beads
-                    # Since delta is -1, remove 1 bead.
                     if action in self.matchboxes[state]:
                         self.matchboxes[state].remove(action)
         
@@ -121,7 +101,7 @@ class RandomAgent:
 
 def play_game(p1, p2, env):
     env.reset()
-    current_letter = 'X' # X goes first
+    current_letter = 'X'
     
     while env.empty_squares():
         if current_letter == 'X':
@@ -143,8 +123,6 @@ def train_menace(episodes=1000):
     
     results = {'win': 0, 'loss': 0, 'draw': 0}
     history_win_rate = []
-    
-    # Block size for averaging
     block_size = 100
     block_wins = 0
     
@@ -179,8 +157,8 @@ def plot_results(win_rates):
     plt.xlabel('Episodes')
     plt.ylabel('Win Rate (per 100 games)')
     plt.grid(True)
-    plt.savefig('menace_results.png')
-    print("Plot saved to menace_results.png")
+    plt.savefig('../results/menace_results.png')
+    print("Plot saved to ../results/menace_results.png")
 
 if __name__ == "__main__":
     win_rates = train_menace(episodes=2000)

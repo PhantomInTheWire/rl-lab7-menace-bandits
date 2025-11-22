@@ -1,0 +1,143 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Reinforcement Learning: MENACE and Bandit Problems\\
+{\footnotesize Lab Assignment 7 Report}
+}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Pawan Meena}
+\IEEEauthorblockA{\textit{Computer Science and Engineering} \\
+\textit{IIIT Vadodara}\\
+Vadodara, India \\
+202351102@iiitvadodara.ac.in}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Solanki Kuldipkumar Kishorbhai}
+\IEEEauthorblockA{\textit{Computer Science and Engineering} \\
+\textit{IIIT Vadodara}\\
+Vadodara, India \\
+202351136@iiitvadodara.ac.in}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Karan Haresh Lokchandani}
+\IEEEauthorblockA{\textit{Computer Science and Engineering} \\
+\textit{IIIT Vadodara}\\
+Vadodara, India \\
+202351055@iiitvadodara.ac.in}
+}
+
+\maketitle
+
+\begin{abstract}
+This report details the implementation and analysis of three fundamental Reinforcement Learning (RL) problems: the Matchbox Educable Naughts and Crosses Engine (MENACE) for Tic-Tac-Toe, the Binary Bandit problem, and the 10-Armed Non-Stationary Bandit problem. We explore the effectiveness of the Epsilon-Greedy algorithm and its modified version for non-stationary environments. Our results demonstrate the learning capability of MENACE and the superior adaptability of constant step-size updates in changing environments.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Reinforcement Learning, MENACE, Multi-Armed Bandit, Epsilon-Greedy, Non-Stationary
+\end{IEEEkeywords}
+
+\section{Introduction}
+Reinforcement Learning (RL) is a subfield of machine learning where an agent learns to make decisions by performing actions in an environment and receiving rewards. A core challenge in RL is the \textit{exploration-exploitation trade-off}, where the agent must balance exploring new actions to find better rewards and exploiting known actions to maximize current rewards.
+
+In this lab, we investigate this trade-off through three distinct tasks:
+\begin{enumerate}
+    \item \textbf{MENACE}: A mechanical learning system for Tic-Tac-Toe.
+    \item \textbf{Binary Bandit}: A simplified bandit problem with binary rewards.
+    \item \textbf{Non-Stationary Bandit}: A complex bandit problem where reward probabilities change over time.
+\end{enumerate}
+
+\section{Methodology}
+
+\subsection{MENACE (Tic-Tac-Toe)}
+The Matchbox Educable Naughts and Crosses Engine (MENACE), introduced by Donald Michie, uses a probabilistic approach to learn Tic-Tac-Toe.
+\begin{itemize}
+    \item \textbf{State}: Each unique board configuration is represented by a matchbox.
+    \item \textbf{Action}: Colored beads in the matchbox represent possible moves.
+    \item \textbf{Learning}: The probability of choosing a move is proportional to the number of corresponding beads.
+    \begin{itemize}
+        \item \textbf{Win}: Add 3 beads of the played color.
+        \item \textbf{Draw}: Add 1 bead.
+        \item \textbf{Loss}: Remove 1 bead.
+    \end{itemize}
+\end{itemize}
+We implemented this logic in Python, training against a Random Agent.
+
+\subsection{Binary Bandit}
+We consider a 2-armed bandit where each arm returns a reward of 1 (success) or 0 (failure) with fixed probabilities $p_A$ and $p_B$. We use the \textbf{Epsilon-Greedy} algorithm:
+\begin{equation}
+A_t = \begin{cases} 
+\text{random action} & \text{with prob. } \epsilon \\
+\arg\max_a Q_t(a) & \text{with prob. } 1 - \epsilon 
+\end{cases}
+\end{equation}
+The value estimates $Q_t(a)$ are updated using the sample average method.
+
+\subsection{Non-Stationary 10-Armed Bandit}
+In this task, we have 10 arms. The mean reward of each arm follows a random walk:
+\begin{equation}
+\mu_t(a) = \mu_{t-1}(a) + \eta, \quad \eta \sim \mathcal{N}(0, 0.01)
+\end{equation}
+This non-stationarity makes sample averages ineffective as they weigh old rewards equally to new ones. We compare two agents:
+\begin{enumerate}
+    \item \textbf{Standard Agent}: Uses sample averages.
+    \item \textbf{Modified Agent}: Uses a constant step-size parameter $\alpha \in (0, 1]$:
+    \begin{equation}
+    Q_{n+1} = Q_n + \alpha [R_n - Q_n]
+    \end{equation}
+    This gives more weight to recent rewards, allowing the agent to track changes.
+\end{enumerate}
+
+\section{Results}
+
+\subsection{MENACE Performance}
+The MENACE agent was trained for 2000 episodes against a random opponent. Fig.~\ref{fig:menace} shows the win rate (averaged over 100-episode blocks). The agent successfully learns to avoid losses and capitalize on the opponent's mistakes, increasing its win rate significantly from the initial random baseline.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.9\linewidth]{menace_results.png}}
+\caption{Win Rate of MENACE Agent vs. Random Agent over 2000 episodes.}
+\label{fig:menace}
+\end{figure}
+
+\subsection{Binary Bandit}
+For the Binary Bandit with $p_A=0.7$ and $p_B=0.3$, the Epsilon-Greedy agent ($\epsilon=0.1$) quickly converged to the optimal action. Fig.~\ref{fig:binary} shows the average reward approaching 0.7 and the percentage of optimal actions approaching 90\% (limited by $\epsilon$).
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.9\linewidth]{binary_bandit_results.png}}
+\caption{Average Reward and \% Optimal Action for Binary Bandit.}
+\label{fig:binary}
+\end{figure}
+
+\subsection{Non-Stationary Comparison}
+We ran the 10-armed non-stationary bandit experiment for 10,000 steps, averaged over 20 runs. Fig.~\ref{fig:means} illustrates the random walk of the true means.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.9\linewidth]{bandit_means.png}}
+\caption{Random Walk of Mean Rewards for 10 Arms.}
+\label{fig:means}
+\end{figure}
+
+Fig.~\ref{fig:comparison} compares the Standard and Modified agents. The Modified Agent ($\alpha=0.1$) consistently achieves higher rewards and selects the optimal action more frequently than the Standard Agent. The Standard Agent fails to adapt quickly to the changing means because its effective step size $1/n$ decreases over time, making it insensitive to recent changes.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.9\linewidth]{non_stationary_comparison.png}}
+\caption{Comparison of Standard (Sample Avg) vs. Modified (Constant Step-size) Agents.}
+\label{fig:comparison}
+\end{figure}
+
+\section{Conclusion}
+This lab demonstrated the efficacy of Reinforcement Learning in various settings. MENACE showed how simple probabilistic updates can lead to intelligent behavior in games. The Bandit experiments highlighted the importance of the exploration-exploitation trade-off and the necessity of constant step-size updates (exponential moving average) in non-stationary environments to maintain adaptability.
+
+\begin{thebibliography}{00}
+\bibitem{b1} R. S. Sutton and A. G. Barto, \textit{Reinforcement Learning: An Introduction}, 2nd ed. Cambridge, MA: MIT Press, 2018.
+\bibitem{b2} D. Michie, ``Experiments on the mechanization of game-learning Part I. Characterization of the model and its parameters,'' \textit{The Computer Journal}, vol. 6, no. 3, pp. 232--236, 1963.
+\end{thebibliography}
+
+\end{document}

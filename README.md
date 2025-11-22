@@ -6,8 +6,7 @@ Reinforcement Learning implementations for MENACE (Tic-Tac-Toe) and Multi-Armed 
 
 ```
 ├── src/          # Python implementations
-├── results/      # Generated plots
-└── docs/         # LaTeX report
+└── docs/         # LaTeX report & visualizations
 ```
 
 ## Usage

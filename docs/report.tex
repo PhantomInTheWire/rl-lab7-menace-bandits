@@ -103,7 +103,7 @@ The comparison implementation is in \texttt{src/ex7\_4.py}\footnote{\url{https:/
 The MENACE agent was trained for 2000 episodes against a random opponent. Fig.~\ref{fig:menace} shows the win rate (averaged over 100-episode blocks). The agent successfully learns to avoid losses and capitalize on the opponent's mistakes, increasing its win rate significantly from the initial random baseline.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{../results/menace_results.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{menace_results.png}}
 \caption{Win Rate of MENACE Agent vs. Random Agent over 2000 episodes.}
 \label{fig:menace}
 \end{figure}
@@ -112,7 +112,7 @@ The MENACE agent was trained for 2000 episodes against a random opponent. Fig.~\
 For the Binary Bandit with $p_A=0.7$ and $p_B=0.3$, the Epsilon-Greedy agent ($\epsilon=0.1$) quickly converged to the optimal action. Fig.~\ref{fig:binary} shows the average reward approaching 0.7 and the percentage of optimal actions approaching 90\% (limited by $\epsilon$).
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{../results/binary_bandit_results.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{binary_bandit_results.png}}
 \caption{Average Reward and \% Optimal Action for Binary Bandit.}
 \label{fig:binary}
 \end{figure}
@@ -121,7 +121,7 @@ For the Binary Bandit with $p_A=0.7$ and $p_B=0.3$, the Epsilon-Greedy agent ($\
 We ran the 10-armed non-stationary bandit experiment for 10,000 steps, averaged over 20 runs. Fig.~\ref{fig:means} illustrates the random walk of the true means.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{../results/bandit_means.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{bandit_means.png}}
 \caption{Random Walk of Mean Rewards for 10 Arms.}
 \label{fig:means}
 \end{figure}
@@ -129,7 +129,7 @@ We ran the 10-armed non-stationary bandit experiment for 10,000 steps, averaged 
 Fig.~\ref{fig:comparison} compares the Standard and Modified agents. The Modified Agent ($\alpha=0.1$) consistently achieves higher rewards and selects the optimal action more frequently than the Standard Agent. The Standard Agent fails to adapt quickly to the changing means because its effective step size $1/n$ decreases over time, making it insensitive to recent changes.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\linewidth]{../results/non_stationary_comparison.png}}
+\centerline{\includegraphics[width=0.9\linewidth]{non_stationary_comparison.png}}
 \caption{Comparison of Standard (Sample Avg) vs. Modified (Constant Step-size) Agents.}
 \label{fig:comparison}
 \end{figure}

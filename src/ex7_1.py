@@ -157,8 +157,8 @@ def plot_results(win_rates):
     plt.xlabel('Episodes')
     plt.ylabel('Win Rate (per 100 games)')
     plt.grid(True)
-    plt.savefig('../results/menace_results.png')
-    print("Plot saved to ../results/menace_results.png")
+    plt.savefig('../docs/menace_results.png')
+    print("Plot saved to ../docs/menace_results.png")
 
 if __name__ == "__main__":
     win_rates = train_menace(episodes=2000)

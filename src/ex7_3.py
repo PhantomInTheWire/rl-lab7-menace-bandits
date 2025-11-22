@@ -31,8 +31,8 @@ def visualize_random_walk(steps=1000):
     plt.ylabel('Mean Reward')
     plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1))
     plt.tight_layout()
-    plt.savefig('../results/bandit_means.png')
-    print("Plot saved to ../results/bandit_means.png")
+    plt.savefig('../docs/bandit_means.png')
+    print("Plot saved to ../docs/bandit_means.png")
 
 if __name__ == "__main__":
     visualize_random_walk(steps=2000)

@@ -71,8 +71,8 @@ def plot_results(rewards, optimal_action_counts, epsilon):
     plt.ylim(0, 1)
     
     plt.tight_layout()
-    plt.savefig('../results/binary_bandit_results.png')
-    print("Plot saved to ../results/binary_bandit_results.png")
+    plt.savefig('../docs/binary_bandit_results.png')
+    print("Plot saved to ../docs/binary_bandit_results.png")
 
 if __name__ == "__main__":
     print("Running Binary Bandit Experiment...")

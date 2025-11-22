@@ -95,8 +95,8 @@ def plot_comparison(r_std, r_mod, o_std, o_mod):
     plt.legend()
     
     plt.tight_layout()
-    plt.savefig('../results/non_stationary_comparison.png')
-    print("Plot saved to ../results/non_stationary_comparison.png")
+    plt.savefig('../docs/non_stationary_comparison.png')
+    print("Plot saved to ../docs/non_stationary_comparison.png")
 
 if __name__ == "__main__":
     r_std, r_mod, o_std, o_mod = run_comparison(steps=10000, runs=20)
